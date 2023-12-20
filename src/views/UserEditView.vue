@@ -31,9 +31,11 @@ const updateUsers = async () => {
   isLoadingSendingUser.value = true;
 
   await store.updateUsers({
-    ...user.value,
     date: getMoment('L', user.value.date),
     id: uuidv4(),
+    name: user.value.name.trim(),
+    phone: user.value.phone.trim(),
+    email: user.value.email.trim(),
   });
 
   clearLocalUser();
@@ -78,7 +80,7 @@ const updateUserField = (name: string, value: string) => {
   }
 
   if (name === 'name' || name === 'email' || name === 'date') {
-    user.value[name] = value.trim();
+    user.value[name] = value;
   }
 };
 
@@ -89,7 +91,7 @@ const isValidUser = computed(() => {
   const phoneNumber = user.value.phone.replace(/[^\d]/g, '');
   const isValidPhoneNumber = phoneNumber[0] === '7' && phoneNumber.length === 11;
 
-  return user.value.name.split(' ').length === 3
+  return user.value.name.trim().split(' ').length === 3
     && isValidPhoneNumber
     && isValidDate
     && regExpEmail.test(user.value.email);
