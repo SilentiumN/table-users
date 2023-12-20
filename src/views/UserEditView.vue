@@ -6,6 +6,7 @@ import { computed, ref } from 'vue';
 import UIInput from '@/components/UI/UIInput.vue';
 import UIButton from '@/components/UI/UIButton.vue';
 import { getMoment } from '@/helpers';
+import { v4 as uuidv4 } from 'uuid';
 
 const user: Ref<User> = ref({
   name: '',
@@ -17,13 +18,25 @@ const user: Ref<User> = ref({
 const store = userStore();
 const isLoadingSendingUser: Ref<boolean> = ref(false);
 
+const clearLocalUser = () => {
+  user.value = {
+    name: '',
+    phone: '',
+    date: '',
+    email: '',
+  };
+};
+
 const updateUsers = async () => {
   isLoadingSendingUser.value = true;
 
   await store.updateUsers({
     ...user.value,
     date: getMoment('L', user.value.date),
+    id: uuidv4(),
   });
+
+  clearLocalUser();
 
   isLoadingSendingUser.value = false;
 };
