@@ -78,7 +78,7 @@ const updateUserField = (name: string, value: string) => {
   }
 
   if (name === 'name' || name === 'email' || name === 'date') {
-    user.value[name] = value;
+    user.value[name] = value.trim();
   }
 };
 
